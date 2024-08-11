@@ -10,19 +10,18 @@ import { CONTACT_STATUS } from "connect-constants";
 
 export const ACTION_BAR_HEIGHT = "85px";
 
+// why are there 3 div containers ???? FooterWrapper -> Actions -> ButtonWrapper
+
 const Actions = styled.div`
-  background: ${props => props.theme.palette.dustyGray};
+  background-color: mediumvioletred;
   height: ${ACTION_BAR_HEIGHT};
+  border-radius: inherit; // will have to do for now but not the best solution :/
 `;
 
 const FooterWrapper = styled.div`
   order: 3;
-  @media (max-width: 640px) {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    right: 0;
-  }
+  background-color: darksalmon;
+  border-radius: 0 0 25px 25px;
 `;
 
 const ButtonWrapper = styled.div`
@@ -33,15 +32,15 @@ const ButtonWrapper = styled.div`
   align-items: center;
   > button {
     min-width: 85px;
-    margin: ${props => props.theme.spacing.mini};
+    margin: ${(props) => props.theme.spacing.mini};
     font-weight: bold;
   }
 `;
 
 const ActionButton = styled(Button)`
-  margin: ${props => props.theme.spacing.small};
-  width: ${props => (props.col ? 100 / props.col - 7 + "%" : "")};
-  
+  margin: ${(props) => props.theme.spacing.small};
+  width: ${(props) => (props.col ? 100 / props.col - 7 + "%" : "")};
+  border-radius: inherit; // will have to do for now but not the best solution :/
 `;
 
 function createMarkup(content) {
@@ -49,11 +48,12 @@ function createMarkup(content) {
 }
 
 export default class ChatActionBar extends React.Component {
-
   constructor() {
     super();
     if (window.connect && window.connect.LogManager) {
-      this.logger = window.connect.LogManager.getLogger({ prefix: "ChatInterface-ChatActionBar" });
+      this.logger = window.connect.LogManager.getLogger({
+        prefix: "ChatInterface-ChatActionBar",
+      });
     }
   }
 
@@ -61,31 +61,29 @@ export default class ChatActionBar extends React.Component {
     contactStatus: PT.string.isRequired,
     onEndChat: PT.func,
     onClose: PT.func,
-    footerConfig: PT.object
+    footerConfig: PT.object,
   };
 
   static defaultProps = {
-    onEndChat: () => { },
-    onClose: () => { },
-    footerConfig: {}
+    onEndChat: () => {},
+    onClose: () => {},
+    footerConfig: {},
   };
 
   componentDidMount() {
-    this.logger && this.logger.info("Component mounted.")
+    this.logger && this.logger.info("Component mounted.");
   }
 
   render() {
-    const {
-      contactStatus,
-      onEndChat,
-      onClose,
-      footerConfig
-    } = this.props;
+    const { contactStatus, onEndChat, onClose, footerConfig } = this.props;
 
     if (footerConfig.render) {
       const content = footerConfig.render(this.props);
-      return footerConfig.isHTML ? <FooterWrapper dangerouslySetInnerHTML={createMarkup(content)} />
-        : <FooterWrapper>{content}</FooterWrapper>
+      return footerConfig.isHTML ? (
+        <FooterWrapper dangerouslySetInnerHTML={createMarkup(content)} />
+      ) : (
+        <FooterWrapper>{content}</FooterWrapper>
+      );
     }
 
     return (
@@ -94,39 +92,27 @@ export default class ChatActionBar extends React.Component {
           <ButtonWrapper>
             {(contactStatus === CONTACT_STATUS.CONNECTED ||
               contactStatus === CONTACT_STATUS.CONNECTING) && (
-                <React.Fragment>
-                  <ActionButton
-                    col="2"
-                    type="default"
-                    onClick={onEndChat}
-                  >
-                    <span>
-                      <FormattedMessage
-                          id="Chat.EndChat"
-                          defaultMessage="End chat"
-                      />
-                    </span>
-                  </ActionButton>
-                </React.Fragment>
-              )}
-
-            {contactStatus === CONTACT_STATUS.ENDED &&
               <React.Fragment>
-                <ActionButton
-                  col="2"
-                  type="default"
-                  onClick={onClose}
-                >
+                <ActionButton col="2" type="default" onClick={onEndChat}>
                   <span>
                     <FormattedMessage
-                        id="Chat.Close"
-                        defaultMessage="Close"
+                      id="Chat.EndChat"
+                      defaultMessage="Gotta go, sorry"
                     />
                   </span>
                 </ActionButton>
               </React.Fragment>
+            )}
 
-            }
+            {contactStatus === CONTACT_STATUS.ENDED && (
+              <React.Fragment>
+                <ActionButton col="2" type="default" onClick={onClose}>
+                  <span>
+                    <FormattedMessage id="Chat.Close" defaultMessage="Close" />
+                  </span>
+                </ActionButton>
+              </React.Fragment>
+            )}
           </ButtonWrapper>
         </Actions>
       </FooterWrapper>

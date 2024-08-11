@@ -7,27 +7,28 @@ import styled from "styled-components";
 
 import ChatContainer from "./components/Chat/ChatContainer";
 
-import defaultTheme from './theme/defaultTheme';
-
+import defaultTheme from "./theme/defaultTheme";
 
 const Page = styled.div`
+  width: 400px;
+  font-family: ${(props) => props.theme.fonts.regular};
 
-  width: 300px;
-  font-family: ${props => props.theme.fonts.regular};
+  margin: ${(props) => props.theme.spacing.base};
+  box-shadow: 0px 2px 3px ${(props) => props.theme.palette.alto};
+  border-radius: 25px;
 
-  margin: ${props => props.theme.spacing.base};
-  border-collapse: collapse;
-  box-shadow: 0px 2px 3px ${props => props.theme.palette.alto};
-
-  box-sizing: border-box;
-
-  *, *:before, *:after {
-    box-sizing: inherit;
+  /* background-color: honeydew; */
+  @media (max-width: 640px) {
+    position: absolute;
+    width: 100%;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
   }
 `;
 
-
-const AppProvider = props => {
+const AppProvider = (props) => {
   return (
     <ThemeProvider theme={Object.assign({}, defaultTheme, props.themeConfig)}>
       {props.children}
@@ -36,14 +37,14 @@ const AppProvider = props => {
 };
 
 App.defaultProps = {
-  baseCssClass: "connect-customer-interface"
+  baseCssClass: "connect-customer-interface",
 };
 
 function App({ baseCssClass, ...props }) {
   return (
     <AppProvider themeConfig={props.themeConfig || {}}>
       <Page className={baseCssClass}>
-        <ChatContainer {...props}/>
+        <ChatContainer {...props} />
       </Page>
     </AppProvider>
   );

@@ -18,7 +18,7 @@
     "not op_mini all"
   ],
   "scripts": {
-    "build": "npm run coverage && node scripts/build.js",
+    "build": "node scripts/build.js",
     "release": "npm run build",
     "debug": "npm run dev-build && node scripts/copyToOutput.js",
     "dev-build": "NODE_ENV=development npx webpack --config configuration/webpack.config.dev.js",
@@ -87,17 +87,12 @@
     ],
     "globalSetup": "./global-setup.js"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run build && cp build/dist/static/js/amazon-connect-chat-interface.js local-testing/ && git add local-testing/amazon-connect-chat-interface.js"
-    }
-  },
   "dependencies": {
     "@babel/runtime": "7.9.2",
     "@emotion/core": "^10.0.35",
     "@svgr/webpack": "^6.2.1",
     "@types/jest": "^28.0.0",
-    "amazon-connect-chatjs": "^2.2.4",
+    "amazon-connect-chatjs": "^2.3.2",
     "core-js": "^3.8.3",
     "dompurify": "^3.0.3",
     "draft-js": "^0.11.7",

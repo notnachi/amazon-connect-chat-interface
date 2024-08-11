@@ -52,33 +52,48 @@
                 containerId: 'root' // This is the id of the container where you want the widget to reside
             });
 
-            document.getElementById('contactDetails').addEventListener('submit', function (e) {
-                e.preventDefault();
-
-                customerName = document.getElementById('firstName').value;
-                if (!customerName) {
-                    alert('you must enter a name & username');
-                    document.getElementById("contactDetails").reset();
-                } else {
-                    console.log("this is the first name:" + customerName);
-                    document.getElementById("contactDetails").reset();
-
-                    connect.ChatInterface.initiateChat({
-                        name: customerName,
+            connect.ChatInterface.initiateChat({
+                        name: 'Flybuys member',
                         region,
                         apiGatewayEndpoint,
                         contactAttributes: JSON.stringify({
-                            "customerName": customerName
+                            "customerName": 'Flybuys member'
                         }),
                         featurePermissions: {
                             "ATTACHMENTS": false,  // this is the override flag from user for attachments
                         },
-                        supportedMessagingContentTypes: "text/plain,text/markdown", // enable rich messaging
+                        supportedMessagingContentTypes: "text/plain", // enable rich messaging
                         contactFlowId,
                         instanceId
                     },successHandler, failureHandler);
-                }
-            });
+
+            // document.getElementById('contactDetails').addEventListener('submit', function (e) {
+            //     e.preventDefault();
+
+            //     customerName = document.getElementById('firstName').value;
+            //     if (!customerName) {
+            //         alert('you must enter a name & username');
+            //         document.getElementById("contactDetails").reset();
+            //     } else {
+            //         console.log("this is the first name:" + customerName);
+            //         document.getElementById("contactDetails").reset();
+
+            //         connect.ChatInterface.initiateChat({
+            //             name: customerName,
+            //             region,
+            //             apiGatewayEndpoint,
+            //             contactAttributes: JSON.stringify({
+            //                 "customerName": customerName
+            //             }),
+            //             featurePermissions: {
+            //                 "ATTACHMENTS": false,  // this is the override flag from user for attachments
+            //             },
+            //             supportedMessagingContentTypes: "text/plain", // enable rich messaging
+            //             contactFlowId,
+            //             instanceId
+            //         },successHandler, failureHandler);
+            //     }
+            // });
         })();
 
         function successHandler(chatSession) {
@@ -95,5 +110,5 @@
             console.log(error);
         }
     </script>
-
+    
 </body>
